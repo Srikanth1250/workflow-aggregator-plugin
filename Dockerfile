@@ -1,14 +1,15 @@
-# Use Maven with Java 17
 FROM maven:3.9.6-eclipse-temurin-17
 
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy your plugin source code into the container
+# Add plugin source
 COPY . .
 
-# Run Maven build
+# Add Maven settings to use HTTPS Jenkins repo
+COPY settings.xml /root/.m2/settings.xml
+
+# Build the plugin
 RUN mvn clean package
 
-# Default command (optional, can be changed)
+# Optional test or shell
 CMD ["mvn", "test"]

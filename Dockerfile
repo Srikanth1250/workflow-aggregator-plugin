@@ -4,10 +4,13 @@ FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
 COPY . .
 
-# Force Maven to use Jenkins public repo (HTTPS)
-RUN mvn clean package -Dmaven.repo.remote=https://repo.jenkins-ci.org/public/
+# Add custom Maven settings with HTTPS repo for Jenkins plugins
+COPY settings.xml /root/.m2/settings.xml
 
-# Stage 2: Optionally run/test or prepare Jenkins with plugin
+# Run Maven build
+RUN mvn clean package
+
+# Stage 2: Optionally test or use built plugin
 FROM maven:3.9.6-eclipse-temurin-17
 
 WORKDIR /app
